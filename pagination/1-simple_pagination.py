@@ -4,9 +4,7 @@ Task 1 - Pagination
 '''
 
 import csv
-import math
-from typing import List
-from typing import Tuple
+from typing import List, Tuple
 
 
 class Server:
@@ -19,12 +17,14 @@ class Server:
         self.__dataset = None
 
     def dataset(self) -> List[List]:
-        ''' '''
+        """Cached dataset
+        """
         if self.__dataset is None:
             with open(self.DATA_FILE) as f:
                 reader = csv.reader(f)
                 dataset = [row for row in reader]
             self.__dataset = dataset[1:]
+
         return self.__dataset
 
     def index_range(page: int, page_size: int) -> Tuple[int, int]:
@@ -37,19 +37,23 @@ class Server:
         return (startIndex, endIndex)
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        ''' get page
+        '''get page
 
         Args:
-            page (int, optional): number of page. Defaults to 1.
-            page_size (int, optional): number of row in page. Defaults to 10.
+            page (int, optional): number of page. Defaults to 1
+            page_size (int, optional): number of row in page. Defaults to 10
 
         Returns:
             List[List]: List of dataset rows by range
         '''
-        assert type(page) is int and type(page_size) is int
-        assert page > 0 and page_size > 0
+        assert isinstance(page, int) and\
+            page > 0, "Page must be an integer greater than 0"
+        assert isinstance(page_size, int) \
+            and page_size > 0, "Page size must be an integer greater than 0"
+
         dataset = self.dataset()
-        start, end = self.index_range(page, page_size)
-        if end > len(dataset):
+        startIndex, endIndex = self.index_range(page, page_size)
+
+        if startIndex >= len(dataset) or startIndex < 0:
             return []
-        return [list(dataset[row]) for row in range(start, end)]
+        return dataset[startIndex:endIndex]
