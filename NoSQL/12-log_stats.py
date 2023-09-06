@@ -1,4 +1,4 @@
-#!usr/bin/env python3
+#!/usr/bin/env python3
 """
 Task 12 - script that provides some stats about Nginx logs stored in MongoDB
 """
