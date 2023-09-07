@@ -3,7 +3,8 @@
 Task 2 - Hypermedia
 '''
 
-import csv, math
+import csv
+import math
 from typing import List, Dict, Tuple
 
 
