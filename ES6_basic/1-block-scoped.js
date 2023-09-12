@@ -1,10 +1,17 @@
+/**
+ * Modify the function taskBlock so that the variables aren’t
+ * overwritten inside the conditional block.
+ *
+ * @param {boolean} trueOrFalse - Value that determines how tasks are modified.
+ * @return {[boolean, boolean]}
+ */
 export default function taskBlock(trueOrFalse) {
-  const task = false;
-  const task2 = true;
+  let task = false;
+  let task2 = true;
 
   if (trueOrFalse) {
-    const task = true;
-    const task2 = false;
+    task = true;
+    task2 = false;
   }
 
   return [task, task2];
