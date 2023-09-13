@@ -1,17 +1,12 @@
-/**
- * Modify the function taskBlock so that the variables aren’t
- * overwritten inside the conditional block.
- *
- * @param {boolean} trueOrFalse - Value that determines how tasks are modified.
- * @return {[boolean, boolean]}
- */
+/* eslint-disable no-unused-vars */
 export default function taskBlock(trueOrFalse) {
   const task = false;
   const task2 = true;
 
   if (trueOrFalse) {
-    const newTask = true;
-    const newTask2 = false;
+    // eslint-disable-next-line no-unused-vars
+    const task = true;
+    const task2 = false;
   }
 
   return [task, task2];
