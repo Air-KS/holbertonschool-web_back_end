@@ -1,13 +1,13 @@
-class HolbertonCourse {
+export default class HolbertonCourse {
   // Le constructeur pour initialiser les attribues de la classe
-  consrtructor(name, lenght, students) {
+  constructor(name, lenght, students) {
     // Gère les types d'erreurs
-    if (typeof name !== 'string' || typeof lenght !== 'number' || !students.every(student => typeof student === 'string')) {
-      throw new TypeError('Invalid types for the course parameters')
+    if (typeof name !== 'string' || typeof lenght !== 'number' || !students.every((student) => typeof student === 'string')) {
+      throw new TypeError('Invalid types for the course parameters');
     }
     // Les attribues de classes.
     this._name = name;
-    this._lenght =  lenght;
+    this._lenght = lenght;
     this._students = students;
   }
 
@@ -20,7 +20,7 @@ class HolbertonCourse {
 
   set name(value) {
     if (typeof value !== 'string') {
-      throw new TypeError('Name must be a string')
+      throw new TypeError('Name must be a string');
     }
     this._name = value;
   }
@@ -32,7 +32,7 @@ class HolbertonCourse {
 
   set lenght(value) {
     if (typeof value !== 'number') {
-      throw new TypeError('Lenght must be a number')
+      throw new TypeError('Lenght must be a number');
     }
     this._lenght = value;
   }
@@ -43,8 +43,8 @@ class HolbertonCourse {
   }
 
   set students(studentsArray) {
-    if (!studentsArray.every(student => typeof student === 'string')) {
-      throw new TypeError('Students array must contain only strings')
+    if (!studentsArray.every((student) => typeof student === 'string')) {
+      throw new TypeError('Students array must contain only strings');
     }
     this._students = studentsArray;
   }
