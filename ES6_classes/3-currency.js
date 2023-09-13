@@ -2,21 +2,21 @@ export default class Currency {
   // Le constructeur pour initialiser les attributs de la classe
   constructor(code, name) {
     if (typeof code !== 'string') {
-      throw new TypeError('Code must be a string')
+      throw new TypeError('Code must be a string');
     }
     if (typeof name !== 'string') {
-      throw new TypeError('Name must be a string')
+      throw new TypeError('Name must be a string');
     }
     // Les attributs de classe
     this._code = code;
     this._name = name;
   }
 
-    // Getters et Setters pour les attributs
+  // Getters et Setters pour les attributs
 
   // code
   get code() {
-    this._code;
+    return this._code;
   }
 
   set code(code) {
@@ -25,7 +25,7 @@ export default class Currency {
 
   // name
   get name() {
-    this._name;
+    return this._name;
   }
 
   set name(name) {
