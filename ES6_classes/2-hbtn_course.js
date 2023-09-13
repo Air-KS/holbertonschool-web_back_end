@@ -1,13 +1,13 @@
 export default class HolbertonCourse {
   // Le constructeur pour initialiser les attribues de la classe
-  constructor(name, lenght, students) {
+  constructor(name, length, students) {
     // Gère les types d'erreurs
-    if (typeof name !== 'string' || typeof lenght !== 'number' || !students.every((student) => typeof student === 'string')) {
+    if (typeof name !== 'string' || typeof length !== 'number' || !students.every((student) => typeof student === 'string')) {
       throw new TypeError('Invalid types for the course parameters');
     }
     // Les attribues de classes.
     this._name = name;
-    this._lenght = lenght;
+    this._length = length;
     this._students = students;
   }
 
@@ -27,14 +27,14 @@ export default class HolbertonCourse {
 
   // lenght
   get lenght() {
-    return this._lenght;
+    return this._length;
   }
 
-  set lenght(value) {
+  set length(value) {
     if (typeof value !== 'number') {
-      throw new TypeError('Lenght must be a number');
+      throw new TypeError('Length must be a number');
     }
-    this._lenght = value;
+    this._length = value;
   }
 
   // students
