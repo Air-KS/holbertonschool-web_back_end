@@ -11,7 +11,7 @@ export default function getFullResponseFromAPI(success) {
       });
     } else {
       // Rejette la promesse avec un message d'erreur.
-      reject(new Error('The fake API is not working currently'))
+      reject(new Error('The fake API is not working currently'));
     }
   });
 }
