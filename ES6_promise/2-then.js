@@ -3,7 +3,7 @@ export default function handleResponseFromAPI(promise) {
   // Accept a promise as an argument
   return promise
     // If the promise resolves successfully
-    .then(() => ({ status: 200, body: 'success', }))
+    .then(() => ({ status: 200, body: 'success' }))
     // If the promise is rejected
     .catch(() => Error())
     // After either resolving or rejecting the promise
