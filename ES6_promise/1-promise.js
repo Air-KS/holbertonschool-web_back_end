@@ -1,13 +1,13 @@
-// Exporte la fonction pour être utilisée dans d'autres modules.
+// Export the function to be used in other modules.
 export default function getFullResponseFromAPI(success) {
-  // Retourne une nouvelle promesse.
+  // Return a new promise.
   return new Promise((resolve, reject) => {
-    // Vérifie si l'argument "success" est vrai.
+    // Check if the "success" argument is true.
     if (success) {
-      // Résout la promesse avec un objet de succès.
+      // Resolve the promise with a success object.
       resolve({
         status: 200,
-        body: 'Success'
+        body: 'Success',
       });
     } else {
       // Rejette la promesse avec un message d'erreur.
