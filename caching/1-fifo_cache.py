@@ -25,7 +25,6 @@ class FIFOCache(BaseCaching):
                 del self.cache_data[discarded]
                 print("DISCARD:", discarded)
 
-
     def get(self, key):
         """ Get an item by key
         """
