@@ -44,7 +44,6 @@ class RedactingFormatter(logging.Formatter):
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
-        NotImplementedError
         """ Format the log record.
 
         Args:
