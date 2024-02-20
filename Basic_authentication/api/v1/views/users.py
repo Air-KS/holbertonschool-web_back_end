@@ -49,8 +49,7 @@ def delete_user(user_id: str = None) -> str:
         abort(404)
     try:
         user.remove()
-        return jsonify({'message':
-            'User deleted successfully'}), 200
+        return jsonify({'OK'}), 200
     except Exception as e:
         return jsonify({'error':
             'Failed to delete user', 'details': str(e)}), 500
