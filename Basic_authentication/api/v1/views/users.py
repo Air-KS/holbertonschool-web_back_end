@@ -39,7 +39,7 @@ def delete_user(user_id: str = None) -> str:
     Path parameter:
       - User ID
     Return:
-      - JSON indicating whether the User has been successfully deleted
+      - empty JSON is the User has been correctly deleted
       - 404 if the User ID doesn't exist
     """
     if user_id is None:
@@ -47,12 +47,8 @@ def delete_user(user_id: str = None) -> str:
     user = User.get(user_id)
     if user is None:
         abort(404)
-    try:
-        user.remove()
-        return jsonify({'OK'}), 200
-    except Exception as e:
-        return jsonify({'error':
-            'Failed to delete user', 'details': str(e)}), 500
+    user.remove()
+    return jsonify({}), 200
 
 
 @app_views.route('/users', methods=['POST'], strict_slashes=False)
