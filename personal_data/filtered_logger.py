@@ -11,9 +11,9 @@ import os
 import mysql.connector
 from mysql.connector.connection import MySQLConnection
 
-PII_FIELDS: Tuple[str, str, str, str, str] = ("name", "email", "phone_number",
-                                              "address",
-                                              "social_security_number")
+PII_FIELDS: Tuple[str, ...] = ("name", "email", "phone_number", "address",
+                               "social_security_number",
+                               "password", "phone", "ssh")
 
 
 def filter_datum(fields: List[str], redaction: str, message: str,
