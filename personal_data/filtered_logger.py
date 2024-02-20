@@ -1,56 +1,37 @@
 #!/usr/bin/env python3
-''' 0. Regex-ing: filter_datum
-    1. Log formatter: class RedactingFormatter
-    2. Create logger
-    3. Connect to secure database
-    4. Read and filter data
-'''
+"""
+Personal data
+"""
 
 import re
-from typing import List
 import logging
+from typing import List
+from typing import Tuple
+import os
 import mysql.connector
-from os import getenv
+from mysql.connector.connection import MySQLConnection
 
-
-PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
+PII_FIELDS: List[str] = ["name", "email", "phone_number", "address",
+                         "social_security_number", "password", "phone", "ssn"]
 
 
 def filter_datum(fields: List[str], redaction: str, message: str,
                  separator: str) -> str:
-    ''' Description: Regex-ing - Write a function called filter_datum that
-                     returns the log message obfuscated:
-
-        Arguments:
-            fields: a list of strings representing all fields to obfuscate
-            redaction: a string representing by what the field will be
-                       obfuscated
-            message: a string representing the log line
-            separator: a string representing by which character is
-                           separating all fields in the log line (message)
-        The function should use a regex to replace occurrences of certain
-        field values.
-        filter_datum should be less than 5 lines long and use re.sub to
-        perform the substitution with a single regex.
-    '''
-
-    for i in fields:
-        message = re.sub(i + "=.*?" + separator,
-                         i + "=" + redaction + separator,
-                         message)
-    return message
+    """
+    Returns the log message obfuscated
+    fields: a list of strings representing all fields to obfuscate
+    redaction: a string representing by what the field will be obfuscated
+    message: a string representing the log line
+    separator: a string representing by which character is
+      separating all fields in the log line
+    """
+    return re.sub(fr'({"|".join(fields)})=[^{separator}]+',
+                  fr'\1={redaction}',
+                  message)
 
 
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
-        Description: Update the class to accept a list of strings fields
-                     constructor argument.
-
-        Implement the format method to filter values in incoming log records
-        using filter_datum. Values for fields in fields should be filtered.
-
-        DO NOT extrapolate FORMAT manually. The format method should be less
-        than 5 lines long
     """
 
     REDACTION = "***"
@@ -58,100 +39,77 @@ class RedactingFormatter(logging.Formatter):
     SEPARATOR = ";"
 
     def __init__(self, fields: List[str]):
-        """ Constructor Method """
+        """Initializes a RedactingFormatter instance with a list
+          of fields to obfuscate.
+
+        Args:
+            fields (List[str]): A list of strings representing
+            the fields to obfuscate in log messages.
+        """
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
-        """ Filters values in incoming log records using filter_datum """
-        return filter_datum(self.fields, self.REDACTION,
-                            super(RedactingFormatter, self).format(record),
-                            self.SEPARATOR)
+        """Formats the log record, obfuscating specified fields
+        in the log message.
+
+        Args:
+            record (logging.LogRecord): The log record to be formatted.
+
+        Returns:
+            str: The formatted log message.
+        """
+        record.msg = filter_datum(self.fields, self.REDACTION, record.msg,
+                                  self.SEPARATOR)
+        return super(RedactingFormatter, self).format(record)
 
 
 def get_logger() -> logging.Logger:
-    ''' Description: Implement a get_logger function that takes no arguments
-                     and returns a logging.Logger object.
+    """Returns a logging.Logger object named "user_data" with
+       specified configurations.
 
-        The logger should be named "user_data" and only log up to logging.INFO
-        level. It should not propagate messages to other loggers. It should
-        have a StreamHandler with RedactingFormatter as formatter.
+    Returns:
+        logging.Logger: The configured logger.
+    """
+    logger = logging.getLogger("user_data")
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
 
-        Create a tuple PII_FIELDS constant at the root of the module containing
-        the fields from user_data.csv that are considered PII. PII_FIELDS can
-        contain only 5 fields - choose the right list of fields that can are
-        considered as "important" PIIs or information that you must hide in
-        your logs. Use it to parameterize the formatter.
-    '''
-    log = logging.getLogger('user_data')
-    log.setLevel(logging.INFO)
-    log.propagate = False
+    formatter = RedactingFormatter(fields=PII_FIELDS)
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(formatter)
 
-    sh = logging.StreamHandler()
-    formatter = RedactingFormatter(PII_FIELDS)
-    sh.setFormatter(formatter)
-    log.addHandler(sh)
+    logger.addHandler(stream_handler)
 
-    return log
+    return logger
 
 
-def get_db() -> mysql.connector.connection.MySQLConnection:
-    ''' Description: you will connect to a secure holberton database to read a
-                     users table. The database is protected by a username and
-                     password that are set as environment variables on the
-                     server named PERSONAL_DATA_DB_USERNAME (set the default as
-                     "root"), PERSONAL_DATA_DB_PASSWORD (set the default as an
-                     empty string) and PERSONAL_DATA_DB_HOST (set the default
-                     as "localhost").
+def get_db() -> MySQLConnection:
+    """Returns a connector to the database.
 
-        The database name is stored in PERSONAL_DATA_DB_NAME.
+    Returns:
+        mysql.connector.connection.MySQLConnection: Database connector object.
+    """
+    username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    database = os.getenv('PERSONAL_DATA_DB_NAME', 'my_db')
 
-        Implement a get_db function that returns a connector to the database
-        (mysql.connector.connection.MySQLConnection object).
+    db = mysql.connector.connect(
+        user=username,
+        password=password,
+        host=host,
+        database=database
+    )
 
-           - Use the os module to obtain credentials from the environment
-           - Use the module mysql-connector-python to connect to the MySQL
-             database (pip3 install mysql-connector-python)
-    '''
-    connection_db = mysql.connector.connection.MySQLConnection(
-        user=getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
-        password=getenv('PERSONAL_DATA_DB_PASSWORD', ''),
-        host=getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
-        database=getenv('PERSONAL_DATA_DB_NAME'))
-
-    return connection_db
+    return db
 
 
-def main():
-    '''
-        Description: Implement a main function that takes no arguments and
-                     returns nothing.
-
-        The function will obtain a database connection using get_db and
-        retrieve all rows in the users table and display each row under a
-        filtered format
-
-        Filtered fields:
-                          name
-                          email
-                          phone
-                          ssn
-                          password
-    '''
-    database = get_db()
-    cursor = database.cursor()
-    cursor.execute("SELECT * FROM users;")
-    fields = [i[0] for i in cursor.description]
-
-    log = get_logger()
-
+if __name__ == "__main__":
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT COUNT(*) FROM users;")
     for row in cursor:
-        str_row = ''.join(f'{f}={str(r)}; ' for r, f in zip(row, fields))
-        log.info(str_row.strip())
-
+        print(row[0])
     cursor.close()
-    database.close()
-
-
-if __name__ == '__main__':
-    main()
+    db.close()
