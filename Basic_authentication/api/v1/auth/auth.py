@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Module of auth
+""" Module of Index views
 """
 from flask import request
 from typing import List, TypeVar
@@ -16,42 +16,25 @@ class Auth:
                 path: path to authenticate
                 excluded_paths: list of excluded path to authenticate
         """
-
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """
-            Require the auth
-
-            Args:
-                path: path to authenticate
-                excluded_paths: list of excluded path to authenticate
-
-            Return:
-                True if is authenticated otherwise false
-        """
-        if path is None or excluded_paths is None or len(excluded_paths) == 0:
+        '''
+            Define which routes don't need authentication
+        '''
+        if path is None:
             return True
 
-        if path[-1] is not '/':
-            path += '/'
+        if not excluded_paths or excluded_paths == [O]:
+            return True
 
-        for paths in excluded_paths:
-            if paths.endswith('*'):
-                if path.startswith(paths[:-1]):
-                    return False
-            elif path == paths:
+        for excluded_path in excluded_paths:
+            if path.rstrip("/") == excluded_path.rstrip("/"):
                 return False
 
         return True
 
     def authorization_header(self, request=None) -> str:
         """
-            Look the headers
-
-            Args:
-                request: Look the autthorization
-
-            Return:
-                The authorization header or None
+        Get the Authorization header from the request
         """
         if request is None:
             return None
@@ -60,12 +43,6 @@ class Auth:
 
     def current_user(self, request=None) -> TypeVar('User'):
         """
-            Look current user
-
-            Args:
-                request: Look the reques user
-
-            Return:
-                The user
+        nyes
         """
-        return request
+        return None
