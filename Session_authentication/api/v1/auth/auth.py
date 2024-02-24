@@ -17,6 +17,7 @@ class Auth:
                 path: path to authenticate
                 excluded_paths: list of excluded path to authenticate
         """
+
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         '''
             Define which routes don't need authentication
@@ -44,7 +45,7 @@ class Auth:
 
     def current_user(self, request=None) -> TypeVar('User'):
         """
-        nyes
+        current
         """
         return None
 

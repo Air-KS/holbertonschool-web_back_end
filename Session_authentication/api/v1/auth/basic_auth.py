@@ -11,9 +11,9 @@ class BasicAuth(Auth):
     '''
         Basic authentication class'
     '''
+
     def extract_base64_authorization_header(self, authorization_header:
                                             str) -> str:
-
         """ Extract Base 64 Authorization Header """
 
         if authorization_header is None:
@@ -31,7 +31,6 @@ class BasicAuth(Auth):
 
     def decode_base64_authorization_header(self, base64_authorization_header:
                                            str) -> str:
-
         """ Decodes the value of a base64 string """
 
         if base64_authorization_header is None:
@@ -52,7 +51,6 @@ class BasicAuth(Auth):
     def extract_user_credentials(self,
                                  decoded_base64_authorization_header: str
                                  ) -> (str, str):
-
         '''
         Extracts user credentials from the decoded base64 string.
         Returns a tuple of the user email and password, in that order.
@@ -73,7 +71,6 @@ class BasicAuth(Auth):
 
     def user_object_from_credentials(self, user_email: str, user_pwd: str
                                      ) -> TypeVar('User'):
-
         """ User object from credentials """
 
         if user_email is None or not isinstance(user_email, str):
@@ -92,7 +89,6 @@ class BasicAuth(Auth):
                 return user
 
     def current_user(self, request=None) -> TypeVar('User'):
-
         """ overloads Auth and retrieves the User instance for a request """
 
         auth_header = self.authorization_header(request)
