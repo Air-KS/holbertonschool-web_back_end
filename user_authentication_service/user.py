@@ -1,7 +1,5 @@
 #!/usr/bin/env pyhton3
-"""
-Class User for ORM
-"""
+""" Class User for ORM """
 
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
@@ -9,7 +7,7 @@ Base = declarative_base()
 
 
 class User(Base):
-    """ Representation of a user """
+    """ Class user """
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     email = Column(String(250), nullable=False)
