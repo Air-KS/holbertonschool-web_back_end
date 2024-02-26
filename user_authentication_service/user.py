@@ -1,17 +1,10 @@
 #!/usr/bin/env pyhton3
 """
 The model will have the following attributes:
-
-- id, the integer primary key
-- email, a non-nullable string
-- hashed_password, a non-nullable string
-- session_id, a nullable string
-- reset_token, a nullable string
 """
 
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-
 Base = declarative_base()
 
 
