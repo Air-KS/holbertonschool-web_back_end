@@ -1,14 +1,15 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """ Basic Babel setup """
-from flask import Flask, request, render_template
+from flask import Flask, render_template, request
 from flask_babel import Babel
 
 
 class Config(object):
     """ Configuration Babel """
-    languages = ["en", "fr"]
-    babel_default_timezone = 'utc'
-    babel_default_locale = 'en'
+    LANGUAGES = ["en", "fr"]
+    BABEL_DEFAULT_TIMEZONE = 'UTC'
+    BABEL_DEFAULT_LOCALE = 'en'
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -22,10 +23,10 @@ def get_locale():
         Return:
             Best match to the language
     """
-    return request.accept_languages.best_match(app.config['languages'])
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
-@app.route('/', strict_slash=False)
+@app.route('/', strict_slashes=False)
 def hello_world():
     """ Greeting
 
