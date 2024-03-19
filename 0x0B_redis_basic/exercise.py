@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-import redis, uuid
+import redis
+import uuid
 from typing import Union
 
 
