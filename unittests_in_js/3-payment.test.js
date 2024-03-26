@@ -1,21 +1,29 @@
-// 3-payment.test.js
-
-const assert = require('assert');
 const sinon = require('sinon');
-const Utils = require('./utils.js');
-const sendPaymentRequestToApi = require('./3-payment.js');
+const assert = require('assert');
 
-describe('sendPaymentRequestToApi', function () {
-    it('should call Utils.calculateNumber with correct arguments', function () {
-        const spy = sinon.spy(Utils, 'calculateNumber');
-        const totalAmount = 100;
-        const totalShipping = 20;
+const Utils = require('./utils');
+const sendPaymentRequestToApi = require('./3-payment');
 
-        sendPaymentRequestToApi(totalAmount, totalShipping);
+describe('sendPaymentRequestToApi', function() {
+  let calculateNumberSpy;
 
-        sinon.assert.calledOnce(spy);
-        sinon.assert.calledWithExactly(spy, 'SUM', totalAmount, totalShipping);
+  beforeEach(function() {
+    calculateNumberSpy = sinon.spy(Utils, 'calculateNumber');
+  });
 
-        spy.restore(); // Restore the original method after the test
-    });
+  afterEach(function() {
+    calculateNumberSpy.restore();
+  });
+
+  it('should call Utils.calculateNumber with correct arguments', function() {
+    sendPaymentRequestToApi(100, 20);
+    sinon.assert.calledWithExactly(calculateNumberSpy, 'SUM', 100, 20);
+  });
+
+  it('should log the correct total', function() {
+    const consoleSpy = sinon.spy(console, 'log');
+    sendPaymentRequestToApi(100, 20);
+    sinon.assert.calledWithExactly(consoleSpy, 'The total is: 120');
+    consoleSpy.restore();
+  });
 });
